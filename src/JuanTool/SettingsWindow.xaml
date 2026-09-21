@@ -1,0 +1,16 @@
+<Window x:Class="JuanTool.SettingsWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="JuanTool settings" Width="520" SizeToContent="Height" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Topmost="True">
+ <StackPanel Margin="28">
+  <TextBlock Text="Make it yours" FontSize="25" FontWeight="SemiBold"/>
+  <TextBlock Text="Your shortcut. Your bookmarks." Foreground="{StaticResource Muted}" Margin="0,6,0,25"/>
+  <TextBlock Text="Open JuanTool" Margin="0,0,0,8"/>
+  <TextBox x:Name="ShortcutBox" IsReadOnly="True" PreviewKeyDown="CaptureShortcut" AutomationProperties.Name="Global shortcut"/>
+  <TextBlock Text="Click above and press a shortcut, such as Alt+Space or Ctrl+Shift+Space. Single function keys F1–F11 also work." Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,7,0,22"/>
+  <TextBlock Text="Chrome User Data folder" Margin="0,0,0,8"/>
+  <DockPanel><Button DockPanel.Dock="Right" Content="Browse" Margin="8,0,0,0" Click="Browse"/><TextBox x:Name="RootBox" AutomationProperties.Name="Chrome User Data folder"/></DockPanel>
+  <TextBlock Text="All profiles in this folder are searched. Your Chrome files are only read." Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,7,0,22"/>
+  <CheckBox x:Name="StartupBox" Content="Start JuanTool when I sign in to Windows" Margin="0,0,0,16"/>
+  <TextBlock Text="Google and ChatGPT open in Chrome. ChatGPT also copies your text, so you can paste it if the website does not fill it in. No API key is needed." Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap"/>
+  <TextBlock x:Name="Error" Foreground="#FFB4AE" TextWrapping="Wrap" Margin="0,14,0,0"/>
+  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0"><Button Content="Cancel" IsCancel="True" Margin="0,0,8,0"/><Button Content="Save settings" Click="Save" Background="#285548"/></StackPanel>
+ </StackPanel>
+</Window>

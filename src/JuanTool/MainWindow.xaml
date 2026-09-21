@@ -1,0 +1,34 @@
+<Window x:Class="JuanTool.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Title="JuanTool" Width="700" SizeToContent="Height" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False" Topmost="True" PreviewKeyDown="OnKeyDown">
+ <Border Margin="16" CornerRadius="18" Background="#111722" BorderBrush="#354154" BorderThickness="1">
+  <Border.Effect><DropShadowEffect BlurRadius="24" ShadowDepth="5" Opacity="0.4"/></Border.Effect>
+  <Grid Margin="23,18,23,16">
+   <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+   <Grid MouseLeftButtonDown="OnDrag"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"><Border Background="#A7F3D0" CornerRadius="6" Padding="6,2"><TextBlock Text="J" FontWeight="Bold" Foreground="#123E35"/></Border><TextBlock Text="JuanTool" FontSize="14" FontWeight="SemiBold" Margin="9,0,0,0" VerticalAlignment="Center"/><TextBlock Text="a shortcut to your everyday" Foreground="{StaticResource Muted}" FontSize="11" Margin="13,0,0,0" VerticalAlignment="Center"/></StackPanel>
+    <Button Grid.Column="1" Content="⚙" ToolTip="Settings" AutomationProperties.Name="Settings" Padding="8,3" Click="OnSettings" Background="Transparent" BorderBrush="Transparent"/>
+    <Button Grid.Column="2" Content="Esc" ToolTip="Hide launcher" Padding="8,3" Margin="5,0,0,0" Click="OnHide" FontSize="10" Background="Transparent"/>
+   </Grid>
+   <Border Grid.Row="1" Background="#192231" CornerRadius="11" BorderBrush="#475D79" BorderThickness="1" Margin="0,18,0,12" Padding="13,8">
+    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition/></Grid.ColumnDefinitions>
+     <TextBlock Text="⌕" FontSize="28" Foreground="#A7F3D0" VerticalAlignment="Center"/>
+     <TextBox x:Name="Query" Grid.Column="1" AutomationProperties.Name="Search bookmarks or type a question" FontSize="21" Padding="8" Background="Transparent" BorderThickness="0" MaxLength="32000" TextChanged="OnQueryChanged" VerticalContentAlignment="Center"/>
+     <TextBlock x:Name="Placeholder" Grid.Column="1" Text="Search bookmarks or ask anything…" Foreground="#7E8CA2" FontSize="20" Margin="9,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+    </Grid>
+   </Border>
+   <Grid Grid.Row="2" Margin="0,0,0,18"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="10"/><ColumnDefinition/></Grid.ColumnDefinitions>
+    <Button x:Name="GoogleButton" Click="OnGoogle" HorizontalContentAlignment="Stretch" ToolTip="Search with Google (Ctrl+Enter)"><StackPanel Orientation="Horizontal"><TextBlock Text="G" FontWeight="Bold" Foreground="#8EB8FF" FontSize="19" Margin="0,0,10,0"/><TextBlock Text="Google" VerticalAlignment="Center"/><TextBlock Text="Ctrl ↵" Foreground="{StaticResource Muted}" Margin="30,0,0,0" FontSize="11" VerticalAlignment="Center"/></StackPanel></Button>
+    <Button x:Name="ChatGptButton" Grid.Column="2" Click="OnChatGpt" ToolTip="Ask ChatGPT (Shift+Enter). Text is also copied for pasting if needed."><StackPanel Orientation="Horizontal"><TextBlock Text="✳" Foreground="#A7F3D0" FontSize="19" Margin="0,0,10,0"/><TextBlock Text="ChatGPT" VerticalAlignment="Center"/><TextBlock Text="Shift ↵" Foreground="{StaticResource Muted}" Margin="25,0,0,0" FontSize="11" VerticalAlignment="Center"/></StackPanel></Button>
+   </Grid>
+   <Grid Grid.Row="3" Margin="0,0,0,8"><TextBlock Text="CHROME BOOKMARKS" Foreground="{StaticResource Muted}" FontSize="10" FontWeight="SemiBold"/><TextBlock x:Name="BookmarkCount" HorizontalAlignment="Right" Foreground="{StaticResource Muted}" FontSize="10"/></Grid>
+   <Grid Grid.Row="4">
+    <ListBox x:Name="Results" AutomationProperties.Name="Matching bookmarks" Background="Transparent" BorderThickness="0" MaxHeight="340" ScrollViewer.HorizontalScrollBarVisibility="Disabled" PreviewMouseLeftButtonUp="OnResultClick">
+     <ListBox.ItemContainerStyle><Style TargetType="ListBoxItem"><Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="10,9"/><Setter Property="Margin" Value="0,2"/><Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ListBoxItem"><Border x:Name="Row" Background="Transparent" CornerRadius="8" Padding="{TemplateBinding Padding}"><ContentPresenter/></Border><ControlTemplate.Triggers><Trigger Property="IsSelected" Value="True"><Setter TargetName="Row" Property="Background" Value="#26384A"/></Trigger><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Row" Property="Background" Value="#223043"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style></ListBox.ItemContainerStyle>
+     <ListBox.ItemTemplate><DataTemplate><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition/><ColumnDefinition Width="22"/></Grid.ColumnDefinitions><Border Background="#304352" CornerRadius="8" Width="30" Height="32" HorizontalAlignment="Left"><TextBlock Text="{Binding Initial}" Foreground="#B9E8D5" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/></Border><StackPanel Grid.Column="1"><TextBlock Text="{Binding Title}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/><TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="10" TextTrimming="CharacterEllipsis" Margin="0,3,0,0"/></StackPanel><TextBlock Grid.Column="2" Text="↗" VerticalAlignment="Center" Foreground="{StaticResource Muted}"/></Grid></DataTemplate></ListBox.ItemTemplate>
+    </ListBox>
+    <StackPanel x:Name="EmptyState" Margin="10,16,10,23"><TextBlock x:Name="EmptyTitle" Text="Your bookmarks, one shortcut away" HorizontalAlignment="Center" FontSize="15"/><TextBlock x:Name="EmptyDetail" Text="Loading bookmarks from Chrome…" Foreground="{StaticResource Muted}" TextWrapping="Wrap" TextAlignment="Center" Margin="0,7,0,0" FontSize="12"/></StackPanel>
+   </Grid>
+   <Grid Grid.Row="5" Margin="0,13,0,0"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="Status" Text="↑ ↓ choose   ·   Enter open   ·   Esc hide" Foreground="{StaticResource Muted}" FontSize="10" TextWrapping="Wrap"/><TextBlock x:Name="Shortcut" Grid.Column="1" Text="Alt + Space" Foreground="#A7F3D0" FontSize="10" Margin="12,0,0,0"/></Grid>
+  </Grid>
+ </Border>
+</Window>
