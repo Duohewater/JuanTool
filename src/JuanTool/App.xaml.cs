@@ -11,6 +11,7 @@ public partial class App : Application
     private EventWaitHandle? wake;
     private RegisteredWaitHandle? wakeRegistration;
     private Forms.NotifyIcon? tray;
+    private System.Drawing.Icon? trayIcon;
     private Hotkey? hotkey;
     private MainWindow? launcher;
     public Settings Settings { get; private set; } = Settings.Load();
@@ -31,7 +32,10 @@ public partial class App : Application
         MainWindow = launcher;
         hotkey = new Hotkey(launcher, launcher.Toggle);
         var registered = hotkey.Register(Settings.Modifiers, Settings.Key);
-        tray = new Forms.NotifyIcon { Text = "JuanTool · " + Settings.ShortcutLabel, Icon = System.Drawing.SystemIcons.Application, Visible = true };
+        using (var iconStream = GetResourceStream(new Uri("pack://application:,,,/Assets/juantool.ico")).Stream)
+        using (var icon = new System.Drawing.Icon(iconStream, Forms.SystemInformation.SmallIconSize))
+            trayIcon = (System.Drawing.Icon)icon.Clone();
+        tray = new Forms.NotifyIcon { Text = "JuanTool · " + Settings.ShortcutLabel, Icon = trayIcon, Visible = true };
         var menu = new Forms.ContextMenuStrip();
         menu.Items.Add("Open JuanTool", null, (_, _) => launcher.Reveal());
         menu.Items.Add("Settings", null, (_, _) => launcher.ShowSettings());
@@ -79,7 +83,7 @@ public partial class App : Application
     {
         IsExiting = true;
         wakeRegistration?.Unregister(null); wake?.Dispose();
-        hotkey?.Dispose(); tray?.Dispose(); singleton?.Dispose();
+        hotkey?.Dispose(); tray?.Dispose(); trayIcon?.Dispose(); singleton?.Dispose();
         base.OnExit(e);
     }
 }

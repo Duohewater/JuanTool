@@ -18,6 +18,8 @@ Run `artifacts/JuanTool/JuanTool.exe`, or double-click **Start JuanTool.cmd** af
 
 Google and ChatGPT buttons appear directly under the input. Ordinary Ctrl+V pastes text into the bar. Bookmark titles, URLs, folders and Chrome profile names are searchable. All local Chrome profiles are loaded again whenever the launcher opens. Links open in Chrome, using the bookmark's original profile; if Chrome is not installed, the default browser is used.
 
+The Chrome bookmarks section shows all bookmarks when the input is empty, and all matching bookmarks when you type; scroll to reach the rest of the list. It folds automatically when your text has no bookmark matches. Matching text or clearing the input expands it again. Click the section header to expand or collapse it manually. The Google and ChatGPT buttons use bundled official icons; their sources are recorded in [Assets/README.md](src/JuanTool/Assets/README.md).
+
 **Chrome can be closed while you search bookmarks. Opening a bookmark or a web search launches the browser.** This version does not embed websites or AI answers in the launcher.
 
 The ChatGPT button opens `https://chatgpt.com/?q=...` and copies the text to your clipboard. This URL parameter is a best-effort browser handoff, not a documented OpenAI API contract. If ChatGPT does not fill the prompt, paste with Ctrl+V; you may need to sign in or submit the prompt. Text longer than 6,000 characters is copied and opens the ChatGPT homepage to avoid URL limits. Text-only input is supported, not image or file uploads.

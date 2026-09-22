@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
 using JuanTool.Core;
@@ -59,6 +60,7 @@ public partial class MainWindow : Window
         var found = Bookmarks.Search(bookmarks, query);
         Results.ItemsSource = found;
         Results.SelectedIndex = found.Count > 0 ? 0 : -1;
+        BookmarkSection.IsExpanded = string.IsNullOrWhiteSpace(query) || found.Count > 0;
         EmptyState.Visibility = found.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         EmptyTitle.Text = bookmarks.Count == 0 ? "No Chrome bookmarks found yet" : "No matching bookmarks";
         EmptyDetail.Text = bookmarks.Count == 0 ? "Add bookmarks in Chrome, or choose its User Data folder in Settings. You can still search below the bar." : "Try another keyword, or send your text to Google or ChatGPT.";
@@ -68,15 +70,15 @@ public partial class MainWindow : Window
         if (e.Key == Key.Escape) { Hide(); e.Handled = true; }
         else if (e.Key is Key.Down or Key.Up)
         {
-            if (Results.Items.Count > 0) { Results.SelectedIndex = Math.Clamp(Results.SelectedIndex + (e.Key == Key.Down ? 1 : -1), 0, Results.Items.Count - 1); Results.ScrollIntoView(Results.SelectedItem); }
+            if (BookmarkSection.IsExpanded && Results.Items.Count > 0) { Results.SelectedIndex = Math.Clamp(Results.SelectedIndex + (e.Key == Key.Down ? 1 : -1), 0, Results.Items.Count - 1); Results.ScrollIntoView(Results.SelectedItem); }
             e.Handled = true;
         }
         else if (e.Key == Key.Enter)
         {
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) Search(false);
             else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) Search(true);
-            else if (Keyboard.FocusedElement is Button) return;
-            else if (Results.SelectedItem is Bookmark bookmark) OpenBookmark(bookmark);
+            else if (Keyboard.FocusedElement is ButtonBase) return;
+            else if (BookmarkSection.IsExpanded && Results.SelectedItem is Bookmark bookmark) OpenBookmark(bookmark);
             else Search(false);
             e.Handled = true;
         }

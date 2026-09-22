@@ -62,12 +62,12 @@ public static class Bookmarks
         foreach (var child in children.EnumerateArray()) Walk(child, next, profile, items);
     }
 
-    public static IReadOnlyList<Bookmark> Search(IEnumerable<Bookmark> items, string query, int limit = 8)
+    public static IReadOnlyList<Bookmark> Search(IEnumerable<Bookmark> items, string query)
     {
         var terms = query.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         return items.Select(b => (Item: b, Score: Score(b, terms, query.Trim())))
             .Where(x => x.Score >= 0).OrderByDescending(x => x.Score)
-            .ThenBy(x => x.Item.Title, StringComparer.OrdinalIgnoreCase).Take(limit).Select(x => x.Item).ToArray();
+            .ThenBy(x => x.Item.Title, StringComparer.OrdinalIgnoreCase).Select(x => x.Item).ToArray();
     }
 
     private static int Score(Bookmark b, string[] terms, string query)

@@ -6,8 +6,11 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>disable</ImplicitUsings>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/juantool.ico</ApplicationIcon>
     <Version>0.1.0</Version>
     <Description>A keyboard-first bookmark and web launcher for Windows.</Description>
   </PropertyGroup>
   <ItemGroup><ProjectReference Include="../JuanTool.Core/JuanTool.Core.csproj" /></ItemGroup>
+  <ItemGroup><Resource Include="Assets/*.png" /></ItemGroup>
+  <ItemGroup><Resource Include="Assets/juantool.ico" /></ItemGroup>
 </Project>

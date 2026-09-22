@@ -25,7 +25,11 @@ Check(Bookmarks.Search(items, "work notes").Single().Title == "Build notes", "Mu
 Check(Bookmarks.Search(items, "example.org").Single().Title == "你好", "Host names searchable");
 Check(Bookmarks.Search(items, "你好").Count == 1, "Unicode search");
 Check(Bookmarks.Search(items, "missing").Count == 0, "No-match query");
-Check(Bookmarks.Search(items, "   ", 2).Count == 2, "Empty query respects result limit");
+var alphabetBookmarks = Enumerable.Range(0, 26).Reverse()
+    .Select(i => new Bookmark(((char)('A' + i)).ToString(), $"https://example.com/{i}", "Bookmarks bar", "Default")).ToArray();
+var allBookmarks = Bookmarks.Search(alphabetBookmarks, "   ");
+Check(allBookmarks.Count == 26 && allBookmarks[0].Title == "A" && allBookmarks[^1].Title == "Z"
+    && Bookmarks.Search(alphabetBookmarks, "example.com").Count == 26, "All bookmarks and matching results are returned beyond the first eight");
 Check(Bookmarks.Search(items, "default").Count == 4, "Profile searchable");
 var query = "C++ & C# / 你好?\nnext line";
 Check(Uri.UnescapeDataString(SearchLinks.Google(query).Split("?q=")[1]) == query, "Google URL preserves symbols, newlines and Unicode");
