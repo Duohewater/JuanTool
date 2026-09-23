@@ -56,6 +56,26 @@ Run the dependency-free regression suite separately:
 dotnet run --project tests/JuanTool.Tests -c Release
 ```
 
+## Windows installer and release
+
+Install [Inno Setup](https://jrsoftware.org/isdl.php) once:
+
+```powershell
+winget install --id JRSoftware.InnoSetup.7 -e -s winget -i
+```
+
+If you already ran `scripts/build.ps1 -SelfContained`, package that executable:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/build-installer.ps1 -SkipBuild
+```
+
+For later releases, quit JuanTool from the tray and omit `-SkipBuild` to run the tests, publish a fresh self-contained app, and compile the installer. Use `-SkipBuild` only with a self-contained build. A custom Inno Setup installation can be selected with `-CompilerPath 'C:\path\to\ISCC.exe'`.
+
+The output is `artifacts/Installer/JuanTool-Setup-<version>-win-x64.exe`. The version comes from the published executable; update `Version` in `src/JuanTool/JuanTool.csproj` before building a new release. The installer targets Windows 11 on x64-compatible systems, installs for the current user without administrator access, adds a Start menu shortcut, offers a desktop shortcut, and provides an uninstaller. It preserves settings on uninstall and removes the login startup entry only when it points to that installation.
+
+Test the setup program and installed app before distribution. Quit any running JuanTool instance before installing or uninstalling. Then commit and push the release's source, open [GitHub Releases](https://github.com/Duohewater/JuanTool/releases), draft a release with a matching version tag, attach the setup executable, and publish. The current Actions workflow produces app build artifacts; it does not publish GitHub Releases. Installer signing is not configured.
+
 ## Implementation
 
 WPF provides the floating UI. Windows `RegisterHotKey` provides the global shortcut. A tray icon and a per-session singleton keep the app available without duplicate background instances. Bookmark JSON is read with shared access; malformed or inaccessible profiles do not prevent other profiles from loading. Browser arguments are passed separately, and only HTTP(S) URLs may be opened.
