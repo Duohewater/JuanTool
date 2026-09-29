@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Windows.Threading;
-using Microsoft.Win32;
 using Forms = System.Windows.Forms;
 
 namespace JuanTool;
@@ -57,9 +56,12 @@ public partial class App : Application
         var previous = Settings;
         var changed = candidate.Key != previous.Key || candidate.Modifiers != previous.Modifiers;
         if (changed && hotkey?.Register(candidate.Modifiers, candidate.Key) != true) return "That shortcut is unavailable. Try Ctrl+Shift+Space or another combination.";
+        StartupRegistration.State? startupBefore = null;
         try
         {
-            SetStartup(candidate.StartWithWindows);
+            startupBefore = StartupRegistration.Current.Capture();
+            if (candidate.StartWithWindows || StartupRegistration.Current.IsEnabled())
+                StartupRegistration.Current.SetEnabled(candidate.StartWithWindows);
             candidate.Save();
             Settings = candidate;
             if (tray is not null) tray.Text = "JuanTool · " + candidate.ShortcutLabel;
@@ -68,15 +70,10 @@ public partial class App : Application
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
         {
             if (changed) hotkey?.Register(previous.Modifiers, previous.Key);
-            try { SetStartup(previous.StartWithWindows); } catch (Exception rollback) when (rollback is IOException or UnauthorizedAccessException or System.Security.SecurityException) { }
+            if (startupBefore is not null)
+                try { StartupRegistration.Current.Restore(startupBefore); } catch (Exception rollback) when (rollback is IOException or UnauthorizedAccessException or System.Security.SecurityException) { }
             return "Could not save settings: " + ex.Message;
         }
-    }
-    private static void SetStartup(bool enabled)
-    {
-        using var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
-        if (enabled) key.SetValue("JuanTool", $"\"{Environment.ProcessPath}\" --background");
-        else key.DeleteValue("JuanTool", false);
     }
     public void Notify(string text) => tray?.ShowBalloonTip(5000, "JuanTool", text, Forms.ToolTipIcon.Info);
     protected override void OnExit(ExitEventArgs e)

@@ -10,15 +10,15 @@ Run `artifacts/JuanTool/JuanTool.exe`, or double-click **Start JuanTool.cmd** af
 | --- | --- |
 | Show / hide | Alt+Space (configurable in Settings) |
 | Select a bookmark | Up / Down |
-| Open selected bookmark; Google if none match | Enter |
+| Open a pasted web link, or the selected bookmark; Google otherwise | Enter |
 | Search Google regardless of bookmark matches | Ctrl+Enter |
 | Ask ChatGPT | Shift+Enter |
 | Hide | Escape or click outside |
 | Settings / Quit | Right-click the tray icon |
 
-Google and ChatGPT buttons appear directly under the input. Ordinary Ctrl+V pastes text into the bar. Bookmark titles, URLs, folders and Chrome profile names are searchable. All local Chrome profiles are loaded again whenever the launcher opens. Links open in Chrome, using the bookmark's original profile; if Chrome is not installed, the default browser is used.
+Google and ChatGPT buttons appear directly under the input. Ordinary Ctrl+V pastes text into the bar. Pasting an `http://` or `https://` link, or a domain such as `example.com/path`, shows an **Open link** button; Enter opens it directly. Ctrl+Enter still searches Google. Bookmark titles, URLs, folders and Chrome profile names are searchable. All local Chrome profiles are loaded again whenever the launcher opens. Links open in Chrome, using the bookmark's original profile; if Chrome is not installed, the default browser is used.
 
-The Chrome bookmarks section shows all bookmarks when the input is empty, and all matching bookmarks when you type; scroll to reach the rest of the list. It folds automatically when your text has no bookmark matches. Matching text or clearing the input expands it again. Click the section header to expand or collapse it manually. The Google and ChatGPT buttons use bundled official icons; their sources are recorded in [Assets/README.md](src/JuanTool/Assets/README.md).
+The Chrome bookmarks section stays folded until your input matches a bookmark. Clear the input or enter text without a match to fold it again. Click the section header to browse all bookmarks manually; scroll to reach the rest of the list. The Google and ChatGPT buttons use bundled official icons; their sources are recorded in [Assets/README.md](src/JuanTool/Assets/README.md).
 
 **Chrome can be closed while you search bookmarks. Opening a bookmark or a web search launches the browser.** This version does not embed websites or AI answers in the launcher.
 
@@ -33,6 +33,8 @@ Chrome's default bookmark location is `%LOCALAPPDATA%\Google\Chrome\User Data`. 
 “Start JuanTool when I sign in to Windows” is optional and off initially. It uses the current user's Windows Run entry. Keep the executable in a stable folder before enabling it. Disable this option before moving or removing the app.
 
 Preferences are stored in `%LOCALAPPDATA%\JuanTool\settings.json`. Bookmark data and typed queries are not stored by JuanTool or sent anywhere while typing. A selected search sends your text to the selected website. Clicking ChatGPT explicitly replaces your clipboard with the prompt as a fallback.
+
+The **Start JuanTool when I sign in to Windows** checkbox controls JuanTool's current-user entry in Windows startup apps. If you change its startup state in Windows Settings or Task Manager, reopening JuanTool settings shows that state. Save with the checkbox enabled to register the executable you are currently running.
 
 ## Build and test
 

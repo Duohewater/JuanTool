@@ -12,7 +12,9 @@ public partial class SettingsWindow : Window
         modifiers = app.Settings.Modifiers; key = app.Settings.Key;
         ShortcutBox.Text = app.Settings.ShortcutLabel;
         RootBox.Text = app.Settings.BookmarkRoot;
-        StartupBox.IsChecked = app.Settings.StartWithWindows;
+        try { StartupBox.IsChecked = StartupRegistration.Current.IsEnabled(); }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException or System.Security.SecurityException)
+        { StartupBox.IsChecked = app.Settings.StartWithWindows; Error.Text = "Could not read Windows startup settings: " + e.Message; }
     }
     private void CaptureShortcut(object sender, KeyEventArgs e)
     {

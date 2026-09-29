@@ -35,6 +35,12 @@ var query = "C++ & C# / 你好?\nnext line";
 Check(Uri.UnescapeDataString(SearchLinks.Google(query).Split("?q=")[1]) == query, "Google URL preserves symbols, newlines and Unicode");
 Check(Uri.UnescapeDataString(SearchLinks.ChatGpt(query).Split("?q=")[1]) == query, "ChatGPT URL preserves pasted text");
 Check(!SearchLinks.IsWebUrl("data:text/html,test") && !SearchLinks.IsWebUrl("chrome://settings") && SearchLinks.IsWebUrl("https://example.com"), "Only web navigation accepted");
+Check(SearchLinks.DirectUrl("  https://example.com/path?q=1  ") == "https://example.com/path?q=1"
+    && SearchLinks.DirectUrl("www.example.com/path") == "https://www.example.com/path"
+    && SearchLinks.DirectUrl("localhost:3000") == "https://localhost:3000/", "Pasted web links open directly with or without a scheme");
+Check(SearchLinks.DirectUrl("what is this") is null && SearchLinks.DirectUrl("javascript:alert(1)") is null
+    && SearchLinks.DirectUrl("file:///C:/secret.txt") is null && SearchLinks.DirectUrl("name@example.com") is null,
+    "Search text and non-web schemes are not treated as direct links");
 
 var root = Path.Combine(Path.GetTempPath(), "JuanTool-tests-" + Guid.NewGuid());
 try
