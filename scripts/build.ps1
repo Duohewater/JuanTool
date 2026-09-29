@@ -8,6 +8,8 @@ try {
     $env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
     dotnet run --project tests/JuanTool.Tests -c Release
     if ($LASTEXITCODE -ne 0) { throw 'Tests failed.' }
+    dotnet run --project tests/JuanTool.StartupTests -c Release
+    if ($LASTEXITCODE -ne 0) { throw 'Startup tests failed.' }
     $standalone = if ($SelfContained) { 'true' } else { 'false' }
     dotnet publish src/JuanTool/JuanTool.csproj -c Release -r win-x64 --self-contained $standalone -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o artifacts/JuanTool
     if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }

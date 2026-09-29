@@ -2,8 +2,11 @@
  <DrawingImage x:Key="JuanToolIcon">
   <DrawingImage.Drawing>
    <DrawingGroup>
-    <GeometryDrawing Brush="#A7F3D0"><GeometryDrawing.Geometry><RectangleGeometry Rect="8,8,240,240" RadiusX="44" RadiusY="44"/></GeometryDrawing.Geometry></GeometryDrawing>
-    <GeometryDrawing Brush="Black" Geometry="F1 M131.818,62.459 L160.748,62.459 160.748,140.174 C160.748,157.424 156.750,170.631 148.754,179.795 140.758,188.959 129.183,193.541 114.029,193.541 107.261,193.541 101.002,192.373 95.252,190.037 L95.252,162.814 C100.223,166.588 105.794,168.475 111.963,168.475 125.200,168.475 131.818,158.652 131.818,139.006 Z"/>
+    <GeometryDrawing Brush="#A7F3D0"><GeometryDrawing.Geometry><RectangleGeometry Rect="2,2,252,252" RadiusX="42" RadiusY="42"/></GeometryDrawing.Geometry></GeometryDrawing>
+    <DrawingGroup>
+     <DrawingGroup.Transform><ScaleTransform ScaleX="1.3" ScaleY="1.3" CenterX="128" CenterY="128"/></DrawingGroup.Transform>
+     <GeometryDrawing Brush="Black" Geometry="F1 M131.818,62.459 L160.748,62.459 160.748,140.174 C160.748,157.424 156.750,170.631 148.754,179.795 140.758,188.959 129.183,193.541 114.029,193.541 107.261,193.541 101.002,192.373 95.252,190.037 L95.252,162.814 C100.223,166.588 105.794,168.475 111.963,168.475 125.200,168.475 131.818,158.652 131.818,139.006 Z"/>
+    </DrawingGroup>
    </DrawingGroup>
   </DrawingImage.Drawing>
  </DrawingImage>

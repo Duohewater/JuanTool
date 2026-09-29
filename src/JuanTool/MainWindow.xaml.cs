@@ -57,10 +57,11 @@ public partial class MainWindow : Window
         var query = Query.Text;
         Placeholder.Visibility = query.Length == 0 ? Visibility.Visible : Visibility.Collapsed;
         GoogleButton.IsEnabled = ChatGptButton.IsEnabled = !string.IsNullOrWhiteSpace(query);
+        OpenLinkButton.Visibility = SearchLinks.DirectUrl(query) is null ? Visibility.Collapsed : Visibility.Visible;
         var found = Bookmarks.Search(bookmarks, query);
         Results.ItemsSource = found;
         Results.SelectedIndex = found.Count > 0 ? 0 : -1;
-        BookmarkSection.IsExpanded = string.IsNullOrWhiteSpace(query) || found.Count > 0;
+        BookmarkSection.IsExpanded = !string.IsNullOrWhiteSpace(query) && found.Count > 0;
         EmptyState.Visibility = found.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         EmptyTitle.Text = bookmarks.Count == 0 ? "No Chrome bookmarks found yet" : "No matching bookmarks";
         EmptyDetail.Text = bookmarks.Count == 0 ? "Add bookmarks in Chrome, or choose its User Data folder in Settings. You can still search below the bar." : "Try another keyword, or send your text to Google or ChatGPT.";
@@ -78,12 +79,14 @@ public partial class MainWindow : Window
             if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) Search(false);
             else if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) Search(true);
             else if (Keyboard.FocusedElement is ButtonBase) return;
+            else if (SearchLinks.DirectUrl(Query.Text) is string link) OpenLink(link);
             else if (BookmarkSection.IsExpanded && Results.SelectedItem is Bookmark bookmark) OpenBookmark(bookmark);
             else Search(false);
             e.Handled = true;
         }
     }
     private void OpenBookmark(Bookmark bookmark) => RunAction(() => Browser.Open(bookmark.Url, bookmark.Profile, app.Settings.BookmarkRoot));
+    private void OpenLink(string link) => RunAction(() => Browser.Open(link));
     private void Search(bool chatGpt)
     {
         var text = Query.Text.Trim();
@@ -111,6 +114,7 @@ public partial class MainWindow : Window
         if (ItemsControl.ContainerFromElement(Results, e.OriginalSource as DependencyObject) is ListBoxItem { DataContext: Bookmark bookmark }) OpenBookmark(bookmark);
     }
     private void OnGoogle(object sender, RoutedEventArgs e) => Search(false);
+    private void OnOpenLink(object sender, RoutedEventArgs e) { if (SearchLinks.DirectUrl(Query.Text) is string link) OpenLink(link); }
     private void OnChatGpt(object sender, RoutedEventArgs e) => Search(true);
     private void OnHide(object sender, RoutedEventArgs e) => Hide();
     private void OnSettings(object sender, RoutedEventArgs e) => ShowSettings();
